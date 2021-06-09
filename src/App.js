@@ -26,7 +26,7 @@ const books2 = [
       auther: 'David McCullough'
     },
     {
-      id: 'Harry Potter and the Sorcerers Stone',
+      id: "Harry Potter and the Sorcerer's Stone",
       bookUrl:'url("http://books.google.com/books/content?id=wrOQLV6xB-wC&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE72G3gA5A-Ka8XjOZGDFLAoUeMQBqZ9y-LCspZ2dzJTugcOcJ4C7FP0tDA8s1h9f480ISXuvYhA_ZpdvRArUL-mZyD4WW7CHyEqHYq9D3kGnrZCNiqxSRhry8TiFDCMWP61ujflB&source=gbs_api")',
       auther: 'J.K. Rowling'
     }
@@ -39,7 +39,7 @@ const books3 = [
       auther: 'J.R.R. Tolkien'
     },
     {
-      id: 'Oh, the Places Youll Go!',
+      id: "Oh, the Places You'll Go!",
       bookUrl:'url("http://books.google.com/books/content?id=1q_xAwAAQBAJ&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE712CA0cBYP8VKbEcIVEuFJRdX1k30rjLM29Y-dw_qU1urEZ2cQ42La3Jkw6KmzMmXIoLTr50SWTpw6VOGq1leINsnTdLc_S5a5sn9Hao2t5YT7Ax1RqtQDiPNHIyXP46Rrw3aL8&source=gbs_api")',
       auther: 'Seuss'
     },
@@ -59,9 +59,6 @@ class BooksApp extends React.Component {
      */
     showSearchPage: false
   }
-
-
-
   render() {
     return (
       <div className="app">
@@ -74,9 +71,9 @@ class BooksApp extends React.Component {
             </div>
             <div className="list-books-content">
               <div>
-                <Bookshelf data= {books1}/>
-                <Bookshelf data= {books2}/>
-                <Bookshelf data= {books3}/>
+                <Bookshelf category = {'Currently Reading'} data= {books1}/>
+                <Bookshelf category = {'Want to Read'} data= {books2}/>
+                <Bookshelf category = {'Read'} data= {books3}/>
               </div>
             </div>
             <div className="open-search">

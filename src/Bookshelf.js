@@ -7,7 +7,7 @@ class Bookshelf extends React.Component{
     // console.log('Props', this.props)
     return (
       <div className="bookshelf">
-        <h2 className="bookshelf-title">Currently Reading</h2>
+        <h2 className="bookshelf-title">{this.props.category}</h2>
         <div className="bookshelf-books">
           <ol className="books-grid">
             {this.props.data.map((item)=>(
