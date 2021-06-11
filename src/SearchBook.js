@@ -1,16 +1,16 @@
 
-import React, { Component }from 'react'
+import React from 'react'
 
 class SearchBook extends React.Component{
   render(){
-    return(
+    return (
         <div className="search-books">
           <div className="search-books-bar">
             <button className="close-search" onClick={() => this.setState({ showSearchPage: false })}>Close</button>
             <div className="search-books-input-wrapper">
               {/*
                 NOTES: The search from BooksAPI is limited to a particular set of search terms.
-                You can find these search terms here:
+              s  You can find these search terms here:
                 https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
 
                 However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
@@ -24,7 +24,7 @@ class SearchBook extends React.Component{
             <ol className="books-grid"></ol>
           </div>
         </div>
-      )
+    )
   }
 }
 
