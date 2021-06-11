@@ -11,8 +11,7 @@ class Book extends Component{
      }
 
      state = {
-       value: 'none',
-       testing: 'url("http://books.google.com/books/content?id=uu1mC6zWNTwC&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE73pGHfBNSsJG9Y8kRBpmLUft9O4BfItHioHolWNKOdLavw-SLcXADy3CPAfJ0_qMb18RmCa7Ds1cTdpM3dxAGJs8zfCfm8c6ggBIjzKT7XR5FIB53HHOhnsT7a0Cc-PpneWq9zX&source=gbs_api")'
+       value: 'none'
      }
 
      handleChange = (e) =>{
@@ -25,15 +24,16 @@ class Book extends Component{
          this.props.onMove(this.props.book, this.state.value);
        }
     }
-    //`url(${_url_})`
+
     render(){
       return (
         <div className="book">
           <form onSubmit = {this.handleSubmit} className='select-book-form'>
               <div className="book-top">
                  <div className="book-cover"
-                  <div className="book-cover" style={{
-                    width: 128, height: 188, backgroundImage: {this.state.testing}}}></div>
+                    style={{ width: 128, height: 188,
+                      backgroundImage: `url(${this.props.book.imageLinks.thumbnail})`
+                      }}>
                 </div>
                  <div className="book-shelf-changer">
                     <select value={this.state.value} onChange={this.handleChange}>
