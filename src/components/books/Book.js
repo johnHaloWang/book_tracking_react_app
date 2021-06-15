@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-// import serializeForm from 'form-serialize'
 
 class Book extends Component{
 
@@ -30,10 +29,7 @@ class Book extends Component{
         <div className="book">
           <form onSubmit = {this.handleSubmit} className='select-book-form'>
               <div className="book-top">
-                 <div className="book-cover"
-                    style={{ width: 128, height: 188,
-                      backgroundImage: `url(${this.props.book.imageLinks.thumbnail})`
-                      }}>
+                 <div className="book-cover" style={{ width: 128, height: 188, backgroundImage: `url(${this.props.book.imageLinks.thumbnail})`}}>
                 </div>
                  <div className="book-shelf-changer">
                     <select value={this.state.value} onChange={this.handleChange}>
