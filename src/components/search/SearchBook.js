@@ -17,10 +17,9 @@ class SearchBook extends React.Component{
   }
 
   updateText = () => {
-    console.log("called")
-    console.log("state: ", this.state.results)
-    console.log("tested error: ", this.state.error)
-    if(this.state.error !== true && this.state.results.length !== undefined){
+    // console.log("called updateText", this.state.error)
+    if(this.state.error !== true && this.state.results !== undefined && this.state.results.length !== undefined){
+      console.log("updateText condition 1: ", this.state.error)
       const list = this.state.results.filter(function(b) {
         if(b!== null &&
                b!== undefined &&
@@ -31,74 +30,82 @@ class SearchBook extends React.Component{
                b.authors !== undefined)
                return b;
       });
-      console.log("called list: ", list)
+      console.log("called list1: ", list)
       return list;
+    }else if(this.state.error === false && this.state.query === ''){
+      console.log("updateText condition 2: ", this.state.error)
+      console.log("updateText condition 2: ", this.state.results)
+      console.log("updateText condition 2: ", this.state.query)
+      return []
     }else{
+      console.log("updateText condition 3: ", this.state.error)
+      console.log("updateText condition 3: ", this.state.results)
+      console.log("updateText condition 3: ", this.state.query)
       return []
     }
-
-
   };
 
+   updateStatement = (state, props, query)=>{
+     console.log("passed in: ", query)
+     return { ...state, error: false, query: query.trim()};
+   };
+
   updateQuery = (query)=>{
-    this.setState(() => ({
-      query: query.trim()
-
-    }))
-    if(this.query !== ''){
-      this.componentDidMount();
-      // console.log("testing ->: ", this.state.results)
-      // this.state.error = (this.query !== '' && this.state.results===undefined || (this.state.results[0] !== undefined && this.state.results[0].error !== undefined))?
-      //                     true
-      //                     :
-      //                     false;
-      console.log("testing update: ", this.state.error)
+    console.log("called updateQuery: ", query)
+    this.setState(state => ({ ...state, error: false, query: query.trim()}));
+    // console.log("called updateQuery check for query: ", query)
+    // console.log("called updateQuery check for state.query: ", this.state.query)
+    if(query.trim()!==''){
+      // this.componentDidMount();
+      BooksAPI.search(query)
+       .then((books)=>{
+         this.setState(()=>({
+              error: (books===undefined || (books[0] !== undefined  && books[0].error === "empty query"))?
+                                  true
+                                  :
+                                  false,
+              results: (this.state.error === true)?[]:books,
+              query: query
+         }))
+       })
+      this.state.error = ((this.query !== '' && this.state.results===undefined) ||
+                         (this.state.results[0] !== undefined && this.state.results[0].error !== undefined))
+                         ?
+                          true
+                          :
+                          false;
+      console.log("testing updateQuery result on error: ", this.state.error)
+    }else{
+      console.log("query is empty ")
     }
-
   }
 
-  componentDidMount(){
-    BooksAPI.search(this.state.query)
-     .then((books)=>{
-       this.setState(()=>({
-            error: (books===undefined)?
-                                true
-                                :
-                                (books[0] !== undefined  && books[0].error === "empty query")?
-                                  true:false,
-            results: (this.state.error === true)?[]:books
-            // results: books
-       }))
-     })
-  }
+  // getData(){
+    // BooksAPI.search(this.state.query)
+    //  .then((books)=>{
+    //    this.setState(()=>({
+    //         error: (books===undefined || (books[0] !== undefined  && books[0].error === "empty query"))?
+    //                             true
+    //                             :
+    //                             false,
+    //         results: (this.state.error === true)?[]:books,
+    //         query: this.state.query
+    //    }))
+    //  })
+  // }
+
+  // componentDidMount(){
+  //   this.getData()
+  //   console.log("com testing: ", this.state.query)
+  // }
+
   render(){
     return (
 
         <div className="search-books">
-
           <div className="search-books-bar">
-            <Link
-              to='/'
-              className="close-search"
-            >Close
-            </Link>
+            <Link to='/' className="close-search">Close</Link>
             <div className="search-books-input-wrapper">
-              {
-                // this.state.error =
-                // (this.state.query !== '' && this.state.results.length === 1 && this.state.results[0]===undefined)
-                // ||
-                // (this.state.query !== '' && this.state.results.length === 1 && this.state.results[0].error === "empty query")
-                // ?true:false
-
-                /*
-
-                NOTES: The search from BooksAPI is limited to a particular set of search terms.
-              s  You can find these search terms here:
-                https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-
-                However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-                you don't find a specific author or title. Every search is limited by search terms.
-              */}
               <input
                 className = 'search-by-titel-or-author'
                 type="text"
@@ -106,23 +113,23 @@ class SearchBook extends React.Component{
                 value={this.state.query}
                 onChange={(event)=> this.updateQuery(event.target.value)}
               />
-
             </div>
           </div>
           <div className="search-books-results">
           {
+            //comment
+            //init state when this.state === false && this.state.query === ''
+            (this.state.error === false && this.state.query === '')?
+            //display nothng
+            ""
+            :
             (this.state.error === true && this.state.query !== '')?
                 "Error in searching .... can't find any results"
               :
-                // (this.state.error === false  && this.state.results.length !== 0)?
-                // (this.state.query !== '')?
                 <Bookshelf
                     category = {'none'}
                     data= {this.updateText()}
-                    onMove={this.props.onMove}
-                />
-                // :
-                // ""
+                    onMove={this.props.onMove} />
           }
           </div>
         </div>
