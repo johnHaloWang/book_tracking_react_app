@@ -7,8 +7,7 @@ import { Route, Link } from 'react-router-dom'
 
 class BooksApp extends React.Component {
   state = {
-    books: [],
-    showSearchPage: false
+    books: []
   }
 
   move_book_to_different_shelf = (book, shelf) => {

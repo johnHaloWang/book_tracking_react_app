@@ -19,12 +19,20 @@ class Book extends Component{
 
      handleSubmit = (e) =>{
        e.preventDefault();
-       if(this.state.value!=='none'){
-         this.props.onMove(this.props.book, this.state.value);
-       }
+        this.props.onMove(this.props.book, this.state.value);
+    }
+
+    componentDidMount(){
+        console.log("testing com: ", this.props.category)
+         this.setState(()=>({
+           value: this.props.category
+         }))
     }
 
     render(){
+      console.log("testing rending value: ", this.state.value)
+      console.log("testing rending book: ", this.props.book)
+      console.log("testing rending category: ", this.props.category)
       return (
         <div className="book">
           <form onSubmit = {this.handleSubmit} className='select-book-form'>
@@ -34,9 +42,9 @@ class Book extends Component{
                  <div className="book-shelf-changer">
                     <select value={this.state.value} onChange={this.handleChange}>
                       <option value="move" disabled>Move to...</option>
-                      {this.props.category !== 'Currently Reading' ?<option value="currentlyReading">Currently Reading</option>:null}
-                      {this.props.category !== 'Want to Read' ?<option value="wantToRead">Want to Read</option>:null}
-                      {this.props.category !== 'Read' ?<option value="read">Read</option>:null}
+                      <option value="currentlyReading">Currently Reading</option>
+                      <option value="wantToRead">Want to Read</option>
+                      <option value="read">Read</option>
                       <option value="none">None</option>
                     </select>
                  </div>

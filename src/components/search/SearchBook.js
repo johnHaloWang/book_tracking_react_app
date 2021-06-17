@@ -17,7 +17,6 @@ class SearchBook extends React.Component{
   }
 
   updateText = () => {
-    // console.log("called updateText", this.state.error)
     if(this.state.error !== true && this.state.results !== undefined && this.state.results.length !== undefined){
       console.log("updateText condition 1: ", this.state.error)
       const list = this.state.results.filter(function(b) {
@@ -32,11 +31,6 @@ class SearchBook extends React.Component{
       });
       console.log("called list1: ", list)
       return list;
-    }else if(this.state.error === false && this.state.query === ''){
-      console.log("updateText condition 2: ", this.state.error)
-      console.log("updateText condition 2: ", this.state.results)
-      console.log("updateText condition 2: ", this.state.query)
-      return []
     }else{
       console.log("updateText condition 3: ", this.state.error)
       console.log("updateText condition 3: ", this.state.results)
@@ -53,18 +47,12 @@ class SearchBook extends React.Component{
   updateQuery = (query)=>{
     console.log("called updateQuery: ", query)
     this.setState(state => ({ ...state, error: false, query: query.trim()}));
-    // console.log("called updateQuery check for query: ", query)
-    // console.log("called updateQuery check for state.query: ", this.state.query)
     if(query.trim()!==''){
-      // this.componentDidMount();
       BooksAPI.search(query)
        .then((books)=>{
          this.setState(()=>({
-              error: (books===undefined || (books[0] !== undefined  && books[0].error === "empty query"))?
-                                  true
-                                  :
-                                  false,
-              results: (this.state.error === true)?[]:books,
+              error: (books.error !== undefined && books.error === "empty query")?true:false,
+              results: (books.error !== undefined && books.error === "empty query")?[]:books,
               query: query
          }))
        })
@@ -80,28 +68,8 @@ class SearchBook extends React.Component{
     }
   }
 
-  // getData(){
-    // BooksAPI.search(this.state.query)
-    //  .then((books)=>{
-    //    this.setState(()=>({
-    //         error: (books===undefined || (books[0] !== undefined  && books[0].error === "empty query"))?
-    //                             true
-    //                             :
-    //                             false,
-    //         results: (this.state.error === true)?[]:books,
-    //         query: this.state.query
-    //    }))
-    //  })
-  // }
-
-  // componentDidMount(){
-  //   this.getData()
-  //   console.log("com testing: ", this.state.query)
-  // }
-
   render(){
     return (
-
         <div className="search-books">
           <div className="search-books-bar">
             <Link to='/' className="close-search">Close</Link>
@@ -117,19 +85,16 @@ class SearchBook extends React.Component{
           </div>
           <div className="search-books-results">
           {
-            //comment
-            //init state when this.state === false && this.state.query === ''
             (this.state.error === false && this.state.query === '')?
-            //display nothng
-            ""
-            :
-            (this.state.error === true && this.state.query !== '')?
-                "Error in searching .... can't find any results"
-              :
-                <Bookshelf
-                    category = {'none'}
-                    data= {this.updateText()}
-                    onMove={this.props.onMove} />
+                ""
+                :
+                (this.state.error === true && this.state.query !== '')?
+                    "Error in searching .... can't find any results"
+                  :
+                    <Bookshelf
+                        category = {'none'}
+                        data= {this.updateText()}
+                        onMove={this.props.onMove} />
           }
           </div>
         </div>
