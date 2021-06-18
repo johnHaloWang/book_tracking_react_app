@@ -11,8 +11,12 @@ class BooksApp extends React.Component {
   }
 
   move_book_to_different_shelf = (book, shelf) => {
-    BooksAPI.update(book, shelf).then(
-      this.componentDidMount()
+    BooksAPI.update(book, shelf).then(response =>{
+          book.shelf = shelf;
+          this.setState(oldState =>({
+            books: oldState.books.filter(oldBook => oldBook.id !== book.id).concat(book)
+          }))
+      }
     )
   }
 
@@ -21,14 +25,15 @@ class BooksApp extends React.Component {
     return list;
   };
 
-  componentDidMount(){
-    BooksAPI.getAll()
-     .then((books)=>{
-       this.setState(()=>({
-         books: [... books]
-       }))
-     })
+  async componentDidMount(){
+    this.getAllBook()
   }
+
+  async getAllBook(){
+    const books = await BooksAPI.getAll();
+    this.setState({books:[...books]})
+  }
+
 
   render() {
     return (

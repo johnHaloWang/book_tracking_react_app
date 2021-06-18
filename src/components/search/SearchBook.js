@@ -19,16 +19,21 @@ class SearchBook extends React.Component{
   updateText = () => {
     if(this.state.error !== true && this.state.results !== undefined && this.state.results.length !== undefined){
       console.log("updateText condition 1: ", this.state.error)
-      const list = this.state.results.filter(function(b) {
-        if(b!== null &&
+      const list = this.state.results.filter(
+      function(b){
+
+        if(b.shelf === undefined){
+          b.shelf = 'none'
+        }
+        return (b!== null &&
                b!== undefined &&
                b.error === undefined &&
                b.imageLinks !== null &&
                b.imageLinks !== undefined &&
                b.authors !== null &&
                b.authors !== undefined)
-               return b;
-      });
+      }
+    );
       console.log("called list1: ", list)
       return list;
     }else{
@@ -46,8 +51,11 @@ class SearchBook extends React.Component{
 
   updateQuery = (query)=>{
     console.log("called updateQuery: ", query)
-    this.setState(state => ({ ...state, error: false, query: query.trim()}));
-    if(query.trim()!==''){
+    this.setState({
+      error: false,
+      query: query.trim()
+    });
+    if(query !==''){
       BooksAPI.search(query)
        .then((books)=>{
          this.setState(()=>({
@@ -56,12 +64,14 @@ class SearchBook extends React.Component{
               query: query
          }))
        })
-      this.state.error = ((this.query !== '' && this.state.results===undefined) ||
-                         (this.state.results[0] !== undefined && this.state.results[0].error !== undefined))
-                         ?
-                          true
-                          :
-                          false;
+      this.setState({
+        error: ((this.query !== '' && this.state.results===undefined) ||
+                           (this.state.results[0] !== undefined && this.state.results[0].error !== undefined))
+                           ?
+                            true
+                            :
+                            false
+       })
       console.log("testing updateQuery result on error: ", this.state.error)
     }else{
       console.log("query is empty ")

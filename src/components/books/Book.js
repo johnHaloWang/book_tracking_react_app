@@ -15,6 +15,7 @@ class Book extends Component{
 
      handleChange = (e) =>{
        this.setState({value: e.target.value});
+       this.props.onMove(this.props.book, e.target.value);
      }
 
      handleSubmit = (e) =>{
@@ -23,7 +24,6 @@ class Book extends Component{
     }
 
     componentDidMount(){
-        console.log("testing com: ", this.props.category)
          this.setState(()=>({
            value: this.props.category
          }))
@@ -35,12 +35,11 @@ class Book extends Component{
       console.log("testing rending category: ", this.props.category)
       return (
         <div className="book">
-          <form onSubmit = {this.handleSubmit} className='select-book-form'>
               <div className="book-top">
                  <div className="book-cover" style={{ width: 128, height: 188, backgroundImage: `url(${this.props.book.imageLinks.thumbnail})`}}>
                 </div>
                  <div className="book-shelf-changer">
-                    <select value={this.state.value} onChange={this.handleChange}>
+                    <select value={this.props.book.shelf} onChange={this.handleChange}>
                       <option value="move" disabled>Move to...</option>
                       <option value="currentlyReading">Currently Reading</option>
                       <option value="wantToRead">Want to Read</option>
@@ -51,8 +50,6 @@ class Book extends Component{
               </div>
               <div className="book-title">{this.props.book.title}</div>
               <div className="book-authors">{this.props.book.authors}</div>
-              <input type="submit" value="Submit" />
-          </form>
         </div>
       )
     }
