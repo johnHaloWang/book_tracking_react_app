@@ -7,33 +7,33 @@ import { Link } from 'react-router-dom'
 
 class SearchBook extends React.Component{
   static propTypes = {
-    onMove: PropTypes.func.isRequired
+    onMove: PropTypes.func.isRequired,
+    books: PropTypes.array.isRequired,
   }
 
   state = {
     query: '',
     results: [],
-    error: false
+    error: false,
   }
 
   updateText = () => {
     if(this.state.error !== true && this.state.results !== undefined && this.state.results.length !== undefined){
       console.log("updateText condition 1: ", this.state.error)
       const list = this.state.results.filter(
-      function(b){
-
-        if(b.shelf === undefined){
-          b.shelf = 'none'
-        }
-        return (b!== null &&
-               b!== undefined &&
-               b.error === undefined &&
-               b.imageLinks !== null &&
-               b.imageLinks !== undefined &&
-               b.authors !== null &&
-               b.authors !== undefined)
-      }
-    );
+          function(b){
+            if(b.shelf === undefined){
+              b.shelf = 'none'
+            }
+            return (b!== null &&
+                   b!== undefined &&
+                   b.error === undefined &&
+                   b.imageLinks !== null &&
+                   b.imageLinks !== undefined &&
+                   b.authors !== null &&
+                   b.authors !== undefined)
+          }
+      );
       console.log("called list1: ", list)
       return list;
     }else{
@@ -46,7 +46,10 @@ class SearchBook extends React.Component{
 
    updateStatement = (state, props, query)=>{
      console.log("passed in: ", query)
-     return { ...state, error: false, query: query.trim()};
+     return { ...state,
+        error: false,
+        query: query.trim()
+     };
    };
 
   updateQuery = (query)=>{
@@ -57,20 +60,27 @@ class SearchBook extends React.Component{
     });
     if(query !==''){
       BooksAPI.search(query)
-       .then((books)=>{
-         this.setState(()=>({
-              error: (books.error !== undefined && books.error === "empty query")?true:false,
-              results: (books.error !== undefined && books.error === "empty query")?[]:books,
-              query: query
-         }))
-       })
+      .then((searchedBooks) => {
+        if(searchedBooks.length){
+          searchedBooks.map( (book) => {
+            const bookOnShelf = this.props.books.find(b => b.id === book.id);
+            if(bookOnShelf){
+              book.shelf = bookOnShelf.shelf
+            }
+            return book
+          })
+        }
+
+        this.setState(()=>({
+             error: (searchedBooks.error !== undefined && searchedBooks.error === "empty query")?true:false,
+             results: (searchedBooks.error !== undefined && searchedBooks.error === "empty query")?[]:searchedBooks,
+             query: query
+        }))
+      });
       this.setState({
-        error: ((this.query !== '' && this.state.results===undefined) ||
+        error: ((query !== '' && this.state.results===undefined) ||
                            (this.state.results[0] !== undefined && this.state.results[0].error !== undefined))
-                           ?
-                            true
-                            :
-                            false
+                           ?true:false
        })
       console.log("testing updateQuery result on error: ", this.state.error)
     }else{
@@ -104,7 +114,8 @@ class SearchBook extends React.Component{
                     <Bookshelf
                         category = {'none'}
                         data= {this.updateText()}
-                        onMove={this.props.onMove} />
+                        onMove={this.props.onMove}
+                        books = {this.props.books}/>
           }
           </div>
         </div>

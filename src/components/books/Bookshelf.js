@@ -4,6 +4,7 @@ import Book from './Book'
 
 class Bookshelf extends Component{
   static propTypes = {
+    books: PropTypes.array.isRequired,
     data: PropTypes.array.isRequired,
     onMove: PropTypes.func.isRequired
   };
@@ -19,6 +20,7 @@ class Bookshelf extends Component{
             {this.props.data.map((item)=>(
               <li key={item.id}>
                 <Book book = {item}
+                  books = {this.props.books}
                   onMove={this.props.onMove}
                   category={this.props.category}
                 />

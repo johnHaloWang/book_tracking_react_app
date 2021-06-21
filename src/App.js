@@ -49,15 +49,18 @@ class BooksApp extends React.Component {
                         category = {'Currently Reading'}
                         data= {this.updateText('currentlyReading')}
                         onMove={this.move_book_to_different_shelf}
+                        books={this.state.books}
                         />
                     <Bookshelf
                         category = {'Want to Read'}
                         data= {this.updateText('wantToRead')}
                         onMove={this.move_book_to_different_shelf}
+                        books={this.state.books}
                         />
                     <Bookshelf category = {'Read'}
                         data= {this.updateText('read')}
                         onMove={this.move_book_to_different_shelf}
+                        books={this.state.books}
                         />
                   </div>
                 </div>
@@ -75,6 +78,7 @@ class BooksApp extends React.Component {
           <Route path='/search' render={ ()=>(
               <SearchBook
                   onMove={this.move_book_to_different_shelf}
+                  books={this.state.books}
               />
           )} />
         </div>
